@@ -11,28 +11,28 @@ GPA : 93.5
 
 ## Experience
 
-Software Engineer Intern - Arista Networks
+### Software Engineer Intern - Arista Networks
 
 May 2022 - August 2022
 
-Research Assistant - Professor Martin Karsten
+### Research Assistant - Professor Martin Karsten
 
 Jan 2022 - April 2022
 
-Core OS Software Developer Student - BlackBerry
+### Core OS Software Developer Student - BlackBerry
 
 Sep 2021 - Dec 2021
 
 ## Interests
 
-### From Project
+From Project
 
 - Linux kernel
 - Concurrency
 - C/C++
 - Network Protocols
 
-### From Courses
+From Courses
 
 - Graphics
 - Applied Cryptography

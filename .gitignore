@@ -1,4 +1,4 @@
 /themes/
 /.hugo_build.lock
 /config.toml
-/host.sh
+/host*.sh
