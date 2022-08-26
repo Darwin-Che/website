@@ -16,20 +16,23 @@ So is the possibility of unrecovered data loss.
 I will backup my new data every few weeks. Each backup will be assigned an incremental ID,
 which will be used to identify the change made in this backup.
 
-ID HD1 HD2 SSD Mac
-0  Y   Y
-1  Y   Y
-2  Y       Y   Y
-.          Y   Y
+|ID |HD1 |HD2 |SSD |Mac |
+|---|----|----|----|----|
+|0  |Y   |Y   |    |    |
+|1  |Y   |Y   |    |    |
+|2  |Y   |    |Y   |Y   |
+|.  |    |    |Y   |Y   |
 
------>>>>>
+TO
 
-ID HD1 HD2 SSD Mac
-0  Y   Y
-1  Y   Y
-2  Y   Y
-3      Y   Y   Y
-.          Y   Y
+| ID | HD1 | HD2 | SSD | MAC |
+|----|-----|-----|-----|-----|
+| 0  | Y   | Y   |     |     |
+| 1  | Y   | Y   |     |     |
+| 2  | Y   | Y   |     |     |
+| 3  |     | Y   | Y   | Y   |
+| .  |     |     | Y   | Y   |
+
 
 For each backup, create a new ID, sync this ID and the last ID to HD alternatively.
 ( So each HD need sync every two backup ID )
@@ -40,31 +43,45 @@ Use ZFS on the HD to for 1) incremental snapshot and 2) bit corruption detection
 
 ```
 sudo zpool create -f -o ashift=12 -O normalization=formD zpool1 /dev/disk2
+sudo zpool create -f -o ashift=12 -O normalization=formD zpool2 /dev/disk3
 
 sudo zfs create zpool1/main
-
-sudo zfs set mountpoint=/Users/***/zpool1 zpool1
-sudo zfs set mountpoint=/Users/***/zpool1/main zpool1/main
-```
-
-```
-sudo zpool import zpool1
-
-sudo zfs mount zpool1/main
-
-sudo zfs unmount zpool1/main
+sudo zfs create zpool2/main
 
 sudo zpool export zpool1
+sudo zpool export zpool2
+sudo zpool import -d /var/run/disk/by-id zpool1
+sudo zpool import -d /var/run/disk/by-id zpool2
+
+sudo zfs set mountpoint=/Users/***/zpool1 zpool1
+sudo zfs set mountpoint=/Users/***/zpool2 zpool2
+sudo zfs set mountpoint=/Users/***/zpool1/main zpool1/main
+sudo zfs set mountpoint=/Users/***/zpool2/main zpool2/main
+```
+
+## HD mount and unmount
+
+```
+sudo zpool import zpool1 zpool2
+
+sudo zfs mount zpool1/main zpool2/main
+
+sudo zfs unmount zpool1/main zpool2/main
+
+sudo zpool export zpool1 zpool2
 ```
 
 Snapshot
 
 ```
 sudo zfs snapshot zpool1/main@1
+sudo zfs snapshot zpool2/main@1
 
 sudo zfs destroy zpool1/main@1
+sudo zfs destroy zpool2/main@1
 
 sudo zfs rename zpool1/main@1 zpool1/main@2
+sudo zfs rename zpool2/main@1 zpool2/main@2
 
 zfs list -t snapshot
 
