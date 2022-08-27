@@ -9,6 +9,7 @@ if [[ ! -d themes ]]; then
 	mkdir themes
 	pushd themes
 	git clone https://github.com/athul/archie.git
+	popd
 	
 fi
 
