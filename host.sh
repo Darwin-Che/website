@@ -14,7 +14,7 @@ fi
 
 read -p "REMOTE = " REMOTE_RDVAL
 if [[ ${REMOTE_RDVAL} != '' ]]; then
-	REMOTE=${REMOTE_RDVAL}
+	REMOTE="\/\/${REMOTE_RDVAL}"
 fi
 
 ############################################################
@@ -41,5 +41,10 @@ configTomlGen
 ############################################################
 ## Start hosting
 
-hugo server -D --bind $BIND -b $REMOTE -p $PORT
+read -p "Generate public/ = " IF_PUBLIC
 
+if [[ ${IF_PUBLIC} == 'y' ]]; then
+       hugo -s . -d ./public
+else
+       hugo server -D --bind $BIND -b $REMOTE -p $PORT
+fi
