@@ -24,8 +24,7 @@ if [[ ! -d themes ]]; then
 	mkdir themes
 	pushd themes
 	git clone https://github.com/athul/archie.git
-	popd themes
-	
+	popd
 fi
 
 
@@ -41,10 +40,11 @@ configTomlGen
 ############################################################
 ## Start hosting
 
-read -p "Generate public/ = " IF_PUBLIC
+read -p "Generate public/ = " PUB_PATH
 
-if [[ ${IF_PUBLIC} == 'y' ]]; then
-       hugo -s . -d ./public
+if [[ ${PUB_PATH} != '' ]]; then
+	hugo -s . -d ${PUB_PATH}
+	sudo chmod 777 -R ${PUB_PATH}
 else
-       hugo server -D --bind $BIND -b $REMOTE -p $PORT
+	hugo server -D --bind $BIND -b $REMOTE -p $PORT
 fi
