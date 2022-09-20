@@ -1,7 +1,7 @@
 ---
 title: My voyage in the Open-Source world
 description: Extending a fast reverse proxy
-date: 2022-08-25
+date: 2022-09-19
 tags: ["go","open-source","libfrp","rfrp"]
 ---
 # My voyage in the Open-Source world
@@ -66,4 +66,45 @@ The routing lookup is wasteful, we only need a routing lookup on the small subse
 
 #### Stateful Router
 
-TODO
+To solve the problems, the key is to have another map containing only the subset of
+enabled subdomains among all active ones.
+
+```
+type Routers struct {
+	indexByDomain map[string]Router
+	enabledDomain map[string]Router // A subset of indexByDomain
+	...
+}
+
+```
+
+The first problem is solved because no redis call is made for routers lookup.
+
+The second problem is solved because only the subset `enabledDomain` is needed for routers lookup.
+
+I can call this 'Stateful Router' because it remembers the enabled states of each subdomain.
+
+But, one challenge is how to handle the case when the enabled status changes.
+
+##### Method 1 : use libfrp for data instead of redis, receiving updates from the controller.
+
+The obvious disadvantage of this method is that the data is only stored in the libfrp.
+This is bad because when the controller needs to display the data,
+it will pause the libfrp for a long time to retrieve the data.
+This is also bad because if libfrp crashes, we lose all data.
+
+##### Method 2 : use the redis PubSub mechanism to receive updates from the controller via redis.
+
+This method sounds easy to implement and promising.
+But there's a catch.
+
+"Redis Pub/Sub is fire and forget that is, if your Pub/Sub client disconnects,
+and reconnects later, all the events delivered during the time the client was
+disconnected are lost."
+By [redis.io](https://redis.io/docs/manual/keyspace-notifications/)
+
+##### Method 3 : In the controller, build a Pub/Sub mechanism that preserves the messages even when the client disconnects.
+
+This is to combine the previous two methods.
+
+Under implementation.
