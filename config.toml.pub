@@ -41,12 +41,17 @@ url = "/blog-algo"
 weight = 3
 
 [[menu.main]]
-name = "About"
-url = "/about"
+name = "Projects"
+url = "/projects"
 weight = 4
 
 [[menu.main]]
-name = "Tags"
-url = "/tags"
-weight = 4
+name = "About"
+url = "/about"
+weight = 5
+
+# [[menu.main]]
+# name = "Tags"
+# url = "/tags"
+# weight = 6
 
