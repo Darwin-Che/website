@@ -1,0 +1,35 @@
+{{ define "main" }}
+
+<h1>Welcome to my site</h1>
+
+<br />
+
+<picture>
+    <img src="https://zhaochengche.me/share/pic/niagara_bg.jpeg" alt="Picture" style="opacity:0.7;width:auto;">
+</picture>
+
+I am an undergraduate student studying computer science.
+<!-- I enjoy reading and writing system software in the OS kernel and in the runtime. -->
+I like the challenges of designing and implementing intuitive, performant, and maintainable code modules.
+
+<br /><br />
+
+In the top-right corner, the
+<a href={{ ref . "blog-tech" }}>Tech Blog</a>
+and
+<a href={{ ref . "blog-algo" }}>Algo Notes</a>
+pages are some articles/notes for future recollection.
+
+The
+<a href={{ ref . "projects" }}>Projects</a>
+page is a summary of my coding projects.
+
+The
+<a href={{ ref . "about" }}>About</a>
+page lists my past coding experience.
+
+<br /><br />
+
+Have a look around and feel free to share! 🥳
+
+{{ end }}
