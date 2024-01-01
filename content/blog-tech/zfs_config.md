@@ -1,9 +1,60 @@
 ---
 title: My Data Backup Operation
 description: Data backup using two HDDs and one portable SSD and Macbook.
-date: 2022-07-26
+date: 2023-06-16
 tags: ["data","backup","config"]
 ---
+
+## Simple and Easy
+
+Two hard disks mirror each other.
+
+Check status of the disk using
+
+```
+sudo zpool import
+---
+   pool: tank
+     id: 12764437793255886395
+  state: ONLINE
+ action: The pool can be imported using its name or numeric identifier.
+ config:
+
+	tank                                            ONLINE
+	  mirror-0                                      ONLINE
+	    media-91BB9297-8A96-C547-890B-2FBD3618CCDC  ONLINE
+	    media-D89A8781-DF1D-5147-96F5-3732792B3847  ONLINE
+```
+
+Import the disks using
+
+```
+sudo zpool import tank
+sudo zpool export tank
+```
+
+Still create snapshots after every sync
+
+```
+zfs list -t snapshot
+---
+NAME                    USED  AVAIL     REFER  MOUNTPOINT
+tank/main@begin         236K      -     1.92M  -
+tank/main@221023_init   419M      -      280G  -
+
+sudo zfs snapshot tank/main@221023_init
+```
+
+Check disk health
+
+```
+zpool status -v
+zpool scrub (-w/-s/-p)
+```
+
+
+
+## Complicated Manual Backup (aborted)
 
 My data back up program is to use two hard drive and one portable SSD and my Macbook.
 
@@ -90,4 +141,6 @@ zfs list -t all -r zpool1
 sudo zfs send zpool1/main@0 | pv | sudo zfs receive zpool2/main
 sudo zfs send -i 0 zpool1/main@1 | pv | sudo zfs receive zpool2/main
 ```
+
+
 
